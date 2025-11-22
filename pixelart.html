@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>2D Канвас для малювання</title>
+    <style>
+        /* Стилі для канвасу та елементів управління */
+        #drawingCanvas {
+            border: 1px solid #000; /* Додаємо рамку для видимості канвасу */
+            cursor: crosshair; /* Змінюємо курсор, щоб вказати на можливість малювання */
+            display: block; /* Забезпечуємо, що канвас займає окремий рядок */
+        }
+        .controls {
+            margin-bottom: 10px;
+        }
+        .controls label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="background: white;">Малювання на Канвасі</h1>
+
+    <div class="controls" style="background:white ;">
+        <label for="colorPicker">Виберіть колір:</label>
+        <input type="color" id="colorPicker" value="#007bff">
+    </div>
+
+    <canvas id="drawingCanvas" width="500" height="500" style="background-color: white;">
+        На жаль, ваш браузер не підтримує елемент canvas.
+    </canvas>
+
+    <script>
+        // Отримання елементів DOM
+        const canvas = document.getElementById('drawingCanvas');
+        const mini_canvas = document.getElementById('miniDrawingCanvas');
+        const colorPicker = document.getElementById('colorPicker');
+        // Отримання 2D-контексту для малювання
+        const ctx = canvas.getContext('2d');
+        const mctx = mini_canvas.getContext('2d');
+
+        // Розмір квадрата, який буде малюватися
+        const squareSize = 10;
+
+        /**
+         * Обробник події кліку на канвасі.
+         * Малює квадрат вибраного кольору в місці кліку.
+         */
+        canvas.addEventListener('click', (event) => {
+            // 1. Отримуємо вибраний колір
+            const selectedColor = colorPicker.value;
+
+            // 2. Отримуємо координати кліку відносно канвасу
+            // getBoundingClientRect() дає позицію канвасу відносно вікна перегляду
+            const rect = canvas.getBoundingClientRect();
+            // event.clientX/Y - координати кліку відносно вікна
+            // Віднімаємо позицію канвасу, щоб отримати координати відносно початку канвасу (0, 0)
+            const clickX = event.clientX - rect.left;
+            const clickY = event.clientY - rect.top;
+
+            // 3. Розраховуємо верхній лівий кут квадрата
+            // Щоб квадрат був центрований приблизно навколо точки кліку,
+            // віднімаємо половину його розміру.
+            // Якщо потрібно, щоб верхній лівий кут був точно в точці кліку,
+            // просто використовуйте clickX та clickY як x та y.
+            // Для цього прикладу використовуємо точний клік як верхній лівий кут:
+            const startX = 10*Math.floor(clickX / 10);
+            const startY = 10*Math.floor(clickY / 10);
+
+            // 4. Встановлюємо колір заливки та малюємо квадрат
+            ctx.fillStyle = selectedColor;
+            // fillRect(x, y, width, height)
+            ctx.fillRect(startX, startY, squareSize, squareSize);
+        });
+    </script>
+
+</body>
+</html>
