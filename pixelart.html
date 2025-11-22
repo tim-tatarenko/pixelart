@@ -16,9 +16,13 @@
         .controls label {
             margin-right: 10px;
         }
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
     </style>
 </head>
-<body>
+<body style="background-image: url(./blue_man.webp);     background-size: 136px;">
 
     <h1 style="background: white;">Малювання на Канвасі</h1>
 
@@ -27,18 +31,37 @@
         <input type="color" id="colorPicker" value="#007bff">
     </div>
 
-    <canvas id="drawingCanvas" width="500" height="500" style="background-color: white;">
-        На жаль, ваш браузер не підтримує елемент canvas.
-    </canvas>
+    <div class="row">
+        <canvas id="drawingCanvas" width="500" height="500" style="background-color: white;">
+            На жаль, ваш браузер не підтримує елемент canvas.
+        </canvas>
+        <textarea id="drawingCanvasTxt"></textarea>
+    </div>
 
+    <div class="row">
+        <canvas id="miniDrawingCanvas" width="80" height="80" style="background-color: white; border: solid 1px black;">
+            На жаль, ваш браузер не підтримує елемент canvas.
+        </canvas>
+        <textarea id="miniDrawingCanvasTxt">1C2255412A1C0000</textarea>
+    </div>
     <script>
+        // Побітне малювання
+        // Отримання 2D-контексту для малювання
+        const mini_canvas = document.getElementById('miniDrawingCanvas');
+        const mctx = mini_canvas.getContext('2d');
+        const PIXEL_1 = [0x1C, 0x22, 0x55, 0x41, 0x2A, 0x1C, 0, 0];
+        mctx.fillStyle = '#F00';
+        for (const [y, p] of PIXEL_1.entries()) {
+          for (let x = 0; x < 8; x++)
+            if (p & (1<<x))
+              mctx.fillRect(x*10, y*10, 10, 10);
+        }
+
         // Отримання елементів DOM
         const canvas = document.getElementById('drawingCanvas');
-        const mini_canvas = document.getElementById('miniDrawingCanvas');
         const colorPicker = document.getElementById('colorPicker');
         // Отримання 2D-контексту для малювання
         const ctx = canvas.getContext('2d');
-        const mctx = mini_canvas.getContext('2d');
 
         // Розмір квадрата, який буде малюватися
         const squareSize = 10;
